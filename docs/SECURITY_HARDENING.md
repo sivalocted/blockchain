@@ -20,3 +20,9 @@
 - Use separate accounts and least-privilege keys
 - Enforce firewall rules on node ports
 - Continuous monitoring and alerting
+
+## Quantum and supercomputer limits
+No system can guarantee being uncrackable. ECDSA (secp256k1) is considered secure
+against classical computers today, but large-scale quantum computers would require
+post-quantum signatures. Plan a migration or hybrid signature scheme if quantum
+resistance is a requirement.

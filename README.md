@@ -35,6 +35,7 @@ Mainnet and ops docs:
 - `docs/THREAT_MODEL.md`
 - `docs/DEPLOYMENT_BARE_METAL.md`
 - `docs/TESTNET_PUBLIC_PLAN.md`
+- `docs/SECURITY_LEVELS.md`
 
 Ops scripts and templates:
 - `ops/run_local.sh`

@@ -8,6 +8,8 @@ import time
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional, Tuple
 
+from .security import enforce_security_requirements
+
 from . import crypto
 from .block import Block, header_hash_from_dict
 from .chain import Chain
@@ -66,6 +68,7 @@ class Node(RpcMixin):
         enable_mining: bool = False,
         mine_interval: int = 10,
     ) -> None:
+        enforce_security_requirements()
         self.data_dir = data_dir
         self.chain = Chain(data_dir)
         self.host = host
