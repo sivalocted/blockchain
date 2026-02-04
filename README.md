@@ -26,6 +26,8 @@ Mainnet and ops docs:
 - `docs/LEGAL_CHECKLIST.md`
 - `docs/BUG_BOUNTY.md`
 - `docs/THREAT_MODEL.md`
+- `docs/DEPLOYMENT_BARE_METAL.md`
+- `docs/TESTNET_PUBLIC_PLAN.md`
 
 Ops scripts and templates:
 - `ops/run_local.sh`

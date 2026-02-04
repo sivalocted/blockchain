@@ -19,6 +19,8 @@
 - Open a bug bounty
 - Collect feedback from external testers
 
+See `docs/TESTNET_PUBLIC_PLAN.md` for seed nodes and faucet workflow details.
+
 ## Phase 3 - Mainnet candidate
 - Freeze chain parameters and tokenomics
 - Run testnet for 4 to 12 weeks with no critical issues
