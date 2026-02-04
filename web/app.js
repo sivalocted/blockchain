@@ -47,8 +47,10 @@ async function loadNetwork() {
     setText("stat-avg", formatSeconds(metrics.avg_block_time));
     setText("stat-mempool", metrics.mempool_size ?? "-");
     networkStatus.textContent = "Network online";
+    networkStatus.classList.remove("offline");
   } catch (err) {
     networkStatus.textContent = "Network offline";
+    networkStatus.classList.add("offline");
   }
 }
 

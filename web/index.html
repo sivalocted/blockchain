@@ -6,14 +6,15 @@
     <title>ScratchChain Testnet</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="sky">
+    <div class="backdrop">
       <div class="glow"></div>
-      <div class="mesh"></div>
-      <div class="rings"></div>
+      <div class="grid"></div>
+      <div class="ring ring-a"></div>
+      <div class="ring ring-b"></div>
     </div>
 
     <header class="nav">
@@ -26,19 +27,23 @@
       </div>
       <div class="links">
         <a href="#features">Features</a>
+        <a href="#quickstart">Quickstart</a>
         <a href="#faucet">Faucet</a>
-        <a href="/explorer" target="_blank">Explorer</a>
+        <a href="/explorer" target="_blank">Command Center</a>
+      </div>
+      <div class="nav-cta">
+        <a class="primary" href="/explorer" target="_blank">Open Explorer</a>
       </div>
     </header>
 
     <main class="container">
       <section class="hero" data-reveal>
         <div>
-          <p class="eyebrow">Next‑gen blockchain stack</p>
-          <h1>Launch your testnet with a futuristic, developer‑first experience.</h1>
+          <p class="eyebrow">Futuristic chain ops</p>
+          <h1>Launch a developer-first testnet with real-time insight.</h1>
           <p class="lead">
-            ScratchChain ships with a full explorer, wallet console, validator ops, governance controls,
-            and a secure faucet — all ready for public testing.
+            ScratchChain combines a secure core protocol with a polished command center,
+            smart contract tooling, governance controls, and a safe faucet for public testing.
           </p>
           <div class="cta">
             <a class="primary" href="/explorer" target="_blank">Open Command Center</a>
@@ -50,7 +55,10 @@
           </div>
         </div>
         <div class="hero-card">
-          <h3>Network Status</h3>
+          <div class="card-head">
+            <h3>Network Status</h3>
+            <span class="pill" id="network-status">Checking…</span>
+          </div>
           <div class="stats">
             <div>
               <span class="label">Height</span>
@@ -69,7 +77,6 @@
               <span class="value" id="stat-mempool">-</span>
             </div>
           </div>
-          <div class="status" id="network-status">Checking network...</div>
           <div class="endpoint">
             <label>RPC Endpoint</label>
             <input id="rpc-endpoint" type="text" placeholder="http://127.0.0.1:9334/rpc" />
@@ -81,21 +88,35 @@
       </section>
 
       <section class="panel" id="features" data-reveal>
-        <h2>What you get</h2>
+        <div class="panel-head">
+          <h2>What ships out of the box</h2>
+          <p>Everything you need to run a public testnet with confidence.</p>
+        </div>
         <div class="grid">
           <div class="card">
             <h3>Command Center</h3>
             <p>Explorer, wallet console, validator ops, governance, contracts, and network tooling.</p>
           </div>
           <div class="card">
-            <h3>Secure Testnet</h3>
-            <p>Signed snapshots, protected RPC, DoS‑aware mempool, and authenticated P2P.</p>
+            <h3>Secure Core</h3>
+            <p>Signed snapshots, protected RPC, DoS-aware mempool, and authenticated P2P.</p>
           </div>
           <div class="card">
-            <h3>Operational Ready</h3>
-            <p>Seed node plan, monitoring exporter, systemd templates, backup scripts.</p>
+            <h3>Ops Ready</h3>
+            <p>Seed node plans, monitoring exporter, systemd templates, and backup scripts.</p>
           </div>
         </div>
+      </section>
+
+      <section class="panel" id="quickstart" data-reveal>
+        <div class="panel-head">
+          <h2>One-command launch</h2>
+          <p>Spin up node, indexer, faucet, and UI in a single command.</p>
+        </div>
+        <div class="code">
+          <code>docker compose up --build</code>
+        </div>
+        <p class="muted">Open <code>http://127.0.0.1:8080</code> for the landing page and <code>/explorer</code> for the Command Center.</p>
       </section>
 
       <section class="panel" id="faucet" data-reveal>
@@ -122,21 +143,15 @@
               <li>Copy your address and paste it here.</li>
               <li>Wait for the faucet tx, then mine or wait for a block.</li>
             </ol>
-            <div class="tips">
-              <span>Tip: Update the endpoint if you host the faucet publicly.</span>
-            </div>
+            <div class="tips">Tip: Update the endpoint if you host the faucet publicly.</div>
           </div>
         </div>
       </section>
-
-      <section class="panel" data-reveal>
-        <h2>Testnet start in one command</h2>
-        <div class="code">
-          <code>docker compose up --build</code>
-        </div>
-        <p class="muted">Then open <code>http://127.0.0.1:8080</code> for the landing page and <code>/explorer</code> for the Command Center.</p>
-      </section>
     </main>
+
+    <footer class="footer">
+      <span>ScratchChain Testnet · Built for fast experimentation.</span>
+    </footer>
 
     <script src="app.js"></script>
   </body>
