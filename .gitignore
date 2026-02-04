@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+.venv/
+.env
+.pytest_cache/
+
+# OS / editor
+.DS_Store
+.vscode/
+
+# Chain runtime data
+scratchchain_demo/
+scratchchain_data_*/
+
+# Logs / misc
+*.log
