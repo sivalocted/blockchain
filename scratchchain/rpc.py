@@ -193,10 +193,12 @@ class RpcMixin:
             wallet_path = params.get("wallet")
             to = params.get("to")
             amount = params.get("amount")
+            fee = params.get("fee")
             if not wallet_path or not to or amount is None:
                 raise ValueError("wallet, to, amount required")
             wallet = Wallet.load(wallet_path)
-            tx = self.chain.build_transfer_tx(wallet, to, _parse_amount(amount))
+            fee_value = _parse_amount(fee) if fee is not None else 0
+            tx = self.chain.build_transfer_tx(wallet, to, _parse_amount(amount), fee=fee_value)
             if not tx:
                 raise ValueError("insufficient funds")
             if not self.chain.add_tx(tx):
@@ -205,10 +207,12 @@ class RpcMixin:
         if method == "stake":
             wallet_path = params.get("wallet")
             amount = params.get("amount")
+            fee = params.get("fee")
             if not wallet_path or amount is None:
                 raise ValueError("wallet, amount required")
             wallet = Wallet.load(wallet_path)
-            tx = self.chain.build_stake_tx(wallet, _parse_amount(amount))
+            fee_value = _parse_amount(fee) if fee is not None else 0
+            tx = self.chain.build_stake_tx(wallet, _parse_amount(amount), fee=fee_value)
             if not tx:
                 raise ValueError("insufficient funds")
             if not self.chain.add_tx(tx):
@@ -217,10 +221,12 @@ class RpcMixin:
         if method == "unstake":
             wallet_path = params.get("wallet")
             amount = params.get("amount")
+            fee = params.get("fee")
             if not wallet_path or amount is None:
                 raise ValueError("wallet, amount required")
             wallet = Wallet.load(wallet_path)
-            tx = self.chain.build_unstake_tx(wallet, _parse_amount(amount))
+            fee_value = _parse_amount(fee) if fee is not None else 0
+            tx = self.chain.build_unstake_tx(wallet, _parse_amount(amount), fee=fee_value)
             if not tx:
                 raise ValueError("insufficient stake")
             if not self.chain.add_tx(tx):
@@ -373,4 +379,10 @@ class RpcMixin:
             wallet = Wallet.create(algo=algo)
             wallet.save(path)
             return {"address": wallet.address, "wallet": path, "algo": algo}
+        if method == "wallet_info":
+            path = params.get("wallet")
+            if not path:
+                raise ValueError("wallet required")
+            wallet = Wallet.load(path)
+            return {"address": wallet.address, "wallet": path, "algo": wallet.algo}
         raise ValueError("unknown method")

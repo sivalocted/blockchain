@@ -1485,16 +1485,22 @@ class Chain:
     def get_stake(self, address: str) -> int:
         return self.stakes.get(address, 0)
 
-    def build_transfer_tx(self, wallet, to_addr: str, amount: int) -> Optional[Transaction]:
-        return self._build_tx(wallet, [TxOutput(amount=amount, address=to_addr)])
+    def build_transfer_tx(self, wallet, to_addr: str, amount: int, fee: int = 0) -> Optional[Transaction]:
+        return self._build_tx(wallet, [TxOutput(amount=amount, address=to_addr)], fee=fee)
 
-    def build_stake_tx(self, wallet, amount: int) -> Optional[Transaction]:
+    def build_stake_tx(self, wallet, amount: int, fee: int = 0) -> Optional[Transaction]:
         out = TxOutput(amount=amount, address=wallet.address, stake=True)
-        return self._build_tx(wallet, [out], tx_type="stake")
+        return self._build_tx(wallet, [out], tx_type="stake", fee=fee)
 
-    def build_unstake_tx(self, wallet, amount: int) -> Optional[Transaction]:
+    def build_unstake_tx(self, wallet, amount: int, fee: int = 0) -> Optional[Transaction]:
         # spend staked UTXOs
-        return self._build_tx(wallet, [TxOutput(amount=amount, address=wallet.address)], tx_type="unstake", include_stake_inputs=True)
+        return self._build_tx(
+            wallet,
+            [TxOutput(amount=amount, address=wallet.address)],
+            tx_type="unstake",
+            include_stake_inputs=True,
+            fee=fee,
+        )
 
     def build_contract_create_tx(self, wallet, code: List[str], storage: Dict[str, int], gas_limit: int, gas_price: int) -> Optional[Transaction]:
         payload = {"code": code, "storage": storage}

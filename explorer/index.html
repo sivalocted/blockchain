@@ -3,67 +3,449 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>ScratchChain Explorer</title>
+    <title>ScratchChain Command Center</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <div class="bg"></div>
-    <main class="container">
-      <header class="hero">
+    <div class="bg">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+      <div class="gridlines"></div>
+    </div>
+
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo">SC</div>
         <div>
-          <p class="eyebrow">ScratchChain Explorer</p>
-          <h1>See blocks, transactions, and contracts in real time.</h1>
-          <p class="subtitle">Connects to your local node RPC at <code>127.0.0.1:9334</code>.</p>
+          <div class="brand-title">ScratchChain</div>
+          <div class="brand-sub">Command Center</div>
         </div>
-        <div class="status" id="status">
-          <div class="stat">
+      </div>
+      <nav class="nav">
+        <a href="#overview">Overview</a>
+        <a href="#explorer">Explorer</a>
+        <a href="#wallet">Wallet</a>
+        <a href="#validators">Validators</a>
+        <a href="#governance">Governance</a>
+        <a href="#contracts">Contracts</a>
+        <a href="#network">Network</a>
+      </nav>
+      <button class="ghost" id="refresh-btn">Refresh</button>
+    </header>
+
+    <main class="container">
+      <section class="hero" id="overview" data-reveal>
+        <div class="hero-copy">
+          <p class="eyebrow">Futuristic Chain Ops</p>
+          <h1>Run, inspect, and ship your blockchain with confidence.</h1>
+          <p class="subtitle">
+            Real-time explorer, wallet console, validator ops, and governance controls — all in one place.
+          </p>
+          <div class="hero-actions">
+            <a class="primary" href="#wallet">Open Wallet Console</a>
+            <a class="secondary" href="#explorer">View Explorer</a>
+          </div>
+          <div class="hero-tags">
+            <span class="pill">PoW + PoS</span>
+            <span class="pill">Snapshots + Fast Sync</span>
+            <span class="pill">On-chain Governance</span>
+            <span class="pill">Secure P2P</span>
+          </div>
+        </div>
+        <div class="hero-panel glass">
+          <h3>Connection</h3>
+          <p class="muted">Point the UI to your local node and indexer.</p>
+          <div class="field">
+            <label for="rpc-input">RPC Endpoint</label>
+            <input id="rpc-input" type="text" placeholder="http://127.0.0.1:9334/rpc" />
+          </div>
+          <div class="field">
+            <label for="indexer-input">Indexer Endpoint</label>
+            <input id="indexer-input" type="text" placeholder="http://127.0.0.1:9337" />
+          </div>
+          <div class="field row">
+            <button id="save-endpoints" class="primary">Save Endpoints</button>
+            <span class="status-pill" id="endpoint-status">Disconnected</span>
+          </div>
+          <div class="field">
+            <label>Node ID</label>
+            <div class="mono soft" id="stat-node">-</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>Network Pulse</h2>
+            <p>Live chain status, mempool, and validator health.</p>
+          </div>
+          <div class="pill">Auto-refreshing</div>
+        </div>
+        <div class="stats-grid">
+          <div class="stat-card">
             <span class="label">Height</span>
             <span class="value" id="stat-height">-</span>
           </div>
-          <div class="stat">
-            <span class="label">Tip</span>
+          <div class="stat-card">
+            <span class="label">Best Tip</span>
             <span class="value mono" id="stat-tip">-</span>
           </div>
-          <div class="stat">
+          <div class="stat-card">
             <span class="label">Mempool</span>
             <span class="value" id="stat-mempool">-</span>
           </div>
+          <div class="stat-card">
+            <span class="label">Difficulty</span>
+            <span class="value" id="stat-difficulty">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Peers</span>
+            <span class="value" id="stat-peers">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Avg Block Time</span>
+            <span class="value" id="stat-avg">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Validators</span>
+            <span class="value" id="stat-validators">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">UTXO Set</span>
+            <span class="value" id="stat-utxo">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Contracts</span>
+            <span class="value" id="stat-contracts">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Forks</span>
+            <span class="value" id="stat-forks">-</span>
+          </div>
+          <div class="stat-card">
+            <span class="label">Mempool Bytes</span>
+            <span class="value" id="stat-mempool-bytes">-</span>
+          </div>
         </div>
-      </header>
-
-      <section class="panel">
-        <div class="panel-header">
-          <h2>Search</h2>
-          <p>Paste a block hash, txid, or address.</p>
-        </div>
-        <div class="search">
-          <input id="search-input" type="text" placeholder="block hash / txid / address" />
-          <button id="search-btn">Search</button>
-        </div>
-        <div class="search-results" id="search-results"></div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="explorer" data-reveal>
         <div class="panel-header">
-          <h2>Latest Blocks</h2>
-          <p>Recent chain activity from the tip.</p>
+          <div>
+            <h2>Explorer</h2>
+            <p>Search blocks, txids, and addresses across the chain.</p>
+          </div>
+          <div class="row">
+            <input id="search-input" type="text" placeholder="block hash / txid / address" />
+            <button id="search-btn" class="primary">Search</button>
+          </div>
         </div>
-        <div class="blocks" id="blocks"></div>
+        <div class="grid-2">
+          <div>
+            <h3>Search Results</h3>
+            <div class="result" id="search-results">Ready.</div>
+          </div>
+          <div>
+            <h3>Latest Blocks</h3>
+            <div class="block-grid" id="blocks"></div>
+          </div>
+        </div>
       </section>
 
-      <section class="panel">
+      <section class="panel" id="wallet" data-reveal>
         <div class="panel-header">
-          <h2>Contracts</h2>
-          <p>Fetch contract code + storage by contract id.</p>
+          <div>
+            <h2>Wallet Console</h2>
+            <p>Create wallets, send funds, stake, and mine blocks.</p>
+          </div>
+          <div class="pill">Local file wallets</div>
         </div>
-        <div class="search">
-          <input id="contract-input" type="text" placeholder="contract id (txid)" />
-          <button id="contract-btn">Load Contract</button>
+        <div class="grid-2">
+          <div class="glass">
+            <h3>Wallet Session</h3>
+            <div class="field">
+              <label for="wallet-path">Wallet File Path</label>
+              <input id="wallet-path" type="text" placeholder="/path/to/wallet.json" />
+            </div>
+            <div class="field row">
+              <button id="wallet-create" class="primary">Create Wallet</button>
+              <button id="wallet-load" class="secondary">Load Wallet</button>
+            </div>
+            <div class="field">
+              <label>Address</label>
+              <div class="mono soft" id="wallet-address">-</div>
+            </div>
+            <div class="wallet-stats">
+              <div>
+                <span class="label">Balance</span>
+                <span class="value" id="wallet-balance">-</span>
+              </div>
+              <div>
+                <span class="label">Staked</span>
+                <span class="value" id="wallet-stake">-</span>
+              </div>
+            </div>
+            <div class="field row">
+              <button id="wallet-refresh" class="ghost">Refresh</button>
+              <button id="wallet-mine" class="ghost">Mine Block</button>
+            </div>
+            <div class="result" id="wallet-result">Waiting for action.</div>
+          </div>
+          <div class="glass">
+            <h3>Transfer</h3>
+            <div class="field">
+              <label for="send-to">Recipient Address</label>
+              <input id="send-to" type="text" placeholder="address" />
+            </div>
+            <div class="field row">
+              <div class="grow">
+                <label for="send-amount">Amount</label>
+                <input id="send-amount" type="number" step="0.00000001" placeholder="1.5" />
+              </div>
+              <div class="grow">
+                <label for="send-fee">Fee</label>
+                <input id="send-fee" type="number" step="0.00000001" placeholder="0.0" />
+              </div>
+            </div>
+            <button id="send-btn" class="primary">Send</button>
+            <h3 class="mt">Stake</h3>
+            <div class="field row">
+              <div class="grow">
+                <label for="stake-amount">Stake Amount</label>
+                <input id="stake-amount" type="number" step="0.00000001" placeholder="10" />
+              </div>
+              <div class="grow">
+                <label for="unstake-amount">Unstake Amount</label>
+                <input id="unstake-amount" type="number" step="0.00000001" placeholder="5" />
+              </div>
+            </div>
+            <div class="field row">
+              <button id="stake-btn" class="secondary">Stake</button>
+              <button id="unstake-btn" class="ghost">Unstake</button>
+            </div>
+            <h3 class="mt">History</h3>
+            <div class="field row">
+              <input id="history-address" type="text" placeholder="address" />
+              <button id="history-btn" class="ghost">Load</button>
+            </div>
+            <pre class="code" id="history-output">[]</pre>
+          </div>
         </div>
-        <pre class="code" id="contract-output"></pre>
+      </section>
+
+      <section class="panel" id="validators" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>Validator Ops</h2>
+            <p>Register, update, and monitor the validator set.</p>
+          </div>
+          <button id="validators-refresh" class="ghost">Refresh</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h3>Validator Set</h3>
+            <div class="table" id="validator-table"></div>
+          </div>
+          <div class="glass">
+            <h3>Register / Update</h3>
+            <div class="field">
+              <label for="validator-wallet">Validator Wallet Path</label>
+              <input id="validator-wallet" type="text" placeholder="/path/to/wallet.json" />
+            </div>
+            <div class="field">
+              <label for="validator-name">Name</label>
+              <input id="validator-name" type="text" placeholder="Node name" />
+            </div>
+            <div class="field">
+              <label for="validator-website">Website</label>
+              <input id="validator-website" type="text" placeholder="https://" />
+            </div>
+            <div class="field row">
+              <div class="grow">
+                <label for="validator-commission">Commission (%)</label>
+                <input id="validator-commission" type="number" step="0.01" placeholder="5" />
+              </div>
+              <div class="grow">
+                <label for="validator-fee">Fee</label>
+                <input id="validator-fee" type="number" step="0.00000001" placeholder="0" />
+              </div>
+            </div>
+            <div class="field row">
+              <button id="validator-register" class="primary">Register</button>
+              <button id="validator-update" class="secondary">Update</button>
+            </div>
+            <div class="result" id="validator-result">Awaiting input.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="governance" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>Governance</h2>
+            <p>Inspect and update on-chain parameters.</p>
+          </div>
+          <button id="gov-refresh" class="ghost">Refresh</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h3>Current Parameters</h3>
+            <pre class="code" id="gov-output">{}</pre>
+          </div>
+          <div class="glass">
+            <h3>Submit Update</h3>
+            <div class="field">
+              <label for="gov-wallet">Governance Wallet Path</label>
+              <input id="gov-wallet" type="text" placeholder="/path/to/wallet.json" />
+            </div>
+            <div class="field">
+              <label for="gov-params">Params JSON</label>
+              <textarea id="gov-params" rows="6" placeholder='{"max_block_gas": 200000, "target_block_time": 10}'></textarea>
+            </div>
+            <button id="gov-submit" class="primary">Submit Governance Tx</button>
+            <div class="result" id="gov-result">Provide params to update.</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="contracts" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>Smart Contracts</h2>
+            <p>Create and call contracts with deterministic gas.</p>
+          </div>
+        </div>
+        <div class="grid-2">
+          <div class="glass">
+            <h3>Create Contract</h3>
+            <div class="field">
+              <label for="contract-wallet">Wallet Path</label>
+              <input id="contract-wallet" type="text" placeholder="/path/to/wallet.json" />
+            </div>
+            <div class="field">
+              <label for="contract-code">Code (JSON array or one opcode per line)</label>
+              <textarea id="contract-code" rows="7" placeholder='["PUSH 5","PUSH 7","ADD","STORE total","STOP"]'></textarea>
+            </div>
+            <div class="field">
+              <label for="contract-storage">Initial Storage (JSON)</label>
+              <textarea id="contract-storage" rows="3" placeholder='{"total": 0}'></textarea>
+            </div>
+            <div class="field row">
+              <div class="grow">
+                <label for="contract-gas-limit">Gas Limit</label>
+                <input id="contract-gas-limit" type="number" placeholder="200" />
+              </div>
+              <div class="grow">
+                <label for="contract-gas-price">Gas Price</label>
+                <input id="contract-gas-price" type="number" placeholder="1" />
+              </div>
+            </div>
+            <button id="contract-create" class="primary">Create Contract</button>
+            <div class="result" id="contract-create-result">Ready.</div>
+          </div>
+          <div class="glass">
+            <h3>Call / Inspect</h3>
+            <div class="field">
+              <label for="contract-call-wallet">Wallet Path</label>
+              <input id="contract-call-wallet" type="text" placeholder="/path/to/wallet.json" />
+            </div>
+            <div class="field">
+              <label for="contract-call-id">Contract ID</label>
+              <input id="contract-call-id" type="text" placeholder="txid" />
+            </div>
+            <div class="field">
+              <label for="contract-call-data">Calldata (JSON array)</label>
+              <textarea id="contract-call-data" rows="3" placeholder='[1,2]'></textarea>
+            </div>
+            <div class="field row">
+              <div class="grow">
+                <label for="contract-call-gas-limit">Gas Limit</label>
+                <input id="contract-call-gas-limit" type="number" placeholder="200" />
+              </div>
+              <div class="grow">
+                <label for="contract-call-gas-price">Gas Price</label>
+                <input id="contract-call-gas-price" type="number" placeholder="1" />
+              </div>
+            </div>
+            <div class="field row">
+              <button id="contract-call" class="secondary">Call Contract</button>
+              <button id="contract-load" class="ghost">Load Contract</button>
+            </div>
+            <pre class="code" id="contract-output">{}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="network" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>Network & Tools</h2>
+            <p>Peers, banscore, snapshots, and merkle proofs.</p>
+          </div>
+          <button id="network-refresh" class="ghost">Refresh</button>
+        </div>
+        <div class="grid-2">
+          <div>
+            <h3>Peer Map</h3>
+            <div class="peer-grid">
+              <div>
+                <span class="label">Connected Peers</span>
+                <div class="mono soft" id="peer-list">[]</div>
+              </div>
+              <div>
+                <span class="label">Known Peers</span>
+                <div class="mono soft" id="known-peer-list">[]</div>
+              </div>
+              <div>
+                <span class="label">Banscore</span>
+                <div class="mono soft" id="banscore-list">{}</div>
+              </div>
+            </div>
+          </div>
+          <div class="glass">
+            <h3>Snapshots</h3>
+            <div class="field">
+              <label for="snapshot-create-path">Create Snapshot (optional path)</label>
+              <input id="snapshot-create-path" type="text" placeholder="/path/to/snapshot.json" />
+            </div>
+            <button id="snapshot-create" class="secondary">Create Snapshot</button>
+            <div class="field mt">
+              <label for="snapshot-load-path">Load Snapshot Path</label>
+              <input id="snapshot-load-path" type="text" placeholder="/path/to/snapshot.json" />
+            </div>
+            <button id="snapshot-load" class="ghost">Load Snapshot</button>
+            <div class="result" id="snapshot-result">No snapshot actions yet.</div>
+            <h3 class="mt">Merkle Proof</h3>
+            <div class="field">
+              <label for="proof-block">Block Hash</label>
+              <input id="proof-block" type="text" placeholder="block hash" />
+            </div>
+            <div class="field">
+              <label for="proof-txid">TXID</label>
+              <input id="proof-txid" type="text" placeholder="txid" />
+            </div>
+            <div class="field row">
+              <button id="proof-create" class="secondary">Create Proof</button>
+              <button id="proof-verify" class="ghost">Verify Proof</button>
+            </div>
+            <pre class="code" id="proof-output">{}</pre>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" data-reveal>
+        <div class="panel-header">
+          <div>
+            <h2>System Console</h2>
+            <p>Action results and debug output.</p>
+          </div>
+        </div>
+        <pre class="code" id="system-output">Ready.</pre>
       </section>
     </main>
 
