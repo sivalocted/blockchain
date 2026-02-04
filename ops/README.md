@@ -4,6 +4,7 @@ This folder contains runbooks, scripts, and templates for running a testnet or m
 
 Files:
 - run_local.sh: start node, indexer, and UI locally
+- docker/entrypoint.sh: bootstrap chain and wallet for containers
 - prometheus_exporter.py: exposes Prometheus metrics from RPC
 - prometheus.yml: sample Prometheus scrape config
 - systemd/: service templates for Linux

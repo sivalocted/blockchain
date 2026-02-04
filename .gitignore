@@ -19,3 +19,7 @@ scratchchain_data_*/
 
 # Logs / misc
 *.log
+
+# Local SSH keys
+.ssh_github_ed25519
+.ssh_github_ed25519.pub

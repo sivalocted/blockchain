@@ -15,6 +15,13 @@ Explorer UI lives in `explorer/`.
 
 Full documentation: `scratchchain/README.md`
 
+Quick docker testnet:
+```bash
+docker compose up --build
+```
+
+Testnet landing page lives in `web/` and serves `/explorer` alongside it.
+
 Mainnet and ops docs:
 - `docs/MAINNET_READINESS.md`
 - `docs/TESTNET_LAUNCH_PLAN.md`

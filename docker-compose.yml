@@ -1,0 +1,68 @@
+version: "3.9"
+
+services:
+  node:
+    build: .
+    container_name: scratchchain-node
+    volumes:
+      - ./scratchchain_data:/data
+    ports:
+      - "9333:9333"
+      - "9334:9334"
+    environment:
+      - DATA_DIR=/data
+      - WALLET=/data/wallet.json
+      - SCRATCHCHAIN_RPC_TOKEN=change_me
+      - SCRATCHCHAIN_P2P_SECRET=change_me
+      - SCRATCHCHAIN_P2P_TLS=0
+    command: [
+      "python", "-m", "scratchchain", "--data-dir", "/data",
+      "node", "--host", "0.0.0.0", "--port", "9333",
+      "--rpc-host", "0.0.0.0", "--rpc-port", "9334",
+      "--mine", "--miner-wallet", "/data/wallet.json",
+      "--mine-interval", "8"
+    ]
+
+  indexer:
+    build: .
+    container_name: scratchchain-indexer
+    depends_on:
+      - node
+    volumes:
+      - ./scratchchain_data:/data
+    ports:
+      - "9337:9337"
+    environment:
+      - DATA_DIR=/data
+    command: [
+      "python", "-m", "scratchchain", "--data-dir", "/data",
+      "indexer", "--host", "0.0.0.0", "--port", "9337"
+    ]
+
+  faucet:
+    build: .
+    container_name: scratchchain-faucet
+    depends_on:
+      - node
+    volumes:
+      - ./scratchchain_data:/data
+    ports:
+      - "9494:9494"
+    environment:
+      - SCRATCHCHAIN_RPC=http://node:9334/rpc
+      - SCRATCHCHAIN_RPC_TOKEN=change_me
+      - SCRATCHCHAIN_FAUCET_WALLET=/data/wallet.json
+      - SCRATCHCHAIN_FAUCET_AMOUNT=5
+      - SCRATCHCHAIN_FAUCET_HOST=0.0.0.0
+      - SCRATCHCHAIN_FAUCET_PORT=9494
+    command: ["python", "/app/ops/faucet.py"]
+
+  ui:
+    image: nginx:alpine
+    container_name: scratchchain-ui
+    ports:
+      - "8080:80"
+    volumes:
+      - ./web:/usr/share/nginx/html
+      - ./explorer:/usr/share/nginx/html/explorer
+      - ./ops/nginx/ui.conf:/etc/nginx/conf.d/default.conf:ro
