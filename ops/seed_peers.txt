@@ -1,0 +1,4 @@
+# One peer per line in host:port format
+# Example:
+# seed1.example.com:9333
+# seed2.example.com:9333

@@ -4,6 +4,7 @@ const COIN = 100000000;
 
 let RPC = localStorage.getItem("scratchchain_rpc") || DEFAULT_RPC;
 let INDEXER = localStorage.getItem("scratchchain_indexer") || DEFAULT_INDEXER;
+let RPC_TOKEN = localStorage.getItem("scratchchain_rpc_token") || "";
 let indexerOnline = null;
 let rpcOnline = null;
 let walletAddress = null;
@@ -64,9 +65,11 @@ function logSystem(message, level = "info") {
 }
 
 async function rpc(method, params = {}) {
+  const headers = { "Content-Type": "application/json" };
+  if (RPC_TOKEN) headers["X-Auth-Token"] = RPC_TOKEN;
   const res = await fetch(RPC, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify({ method, params }),
   });
   const data = await res.json();
@@ -653,11 +656,14 @@ function setupReveal() {
 function setupEndpoints() {
   document.getElementById("rpc-input").value = RPC;
   document.getElementById("indexer-input").value = INDEXER;
+  document.getElementById("rpc-token").value = RPC_TOKEN;
   document.getElementById("save-endpoints").addEventListener("click", () => {
     RPC = normalizeRpcEndpoint(document.getElementById("rpc-input").value);
     INDEXER = normalizeIndexerEndpoint(document.getElementById("indexer-input").value);
+    RPC_TOKEN = document.getElementById("rpc-token").value.trim();
     localStorage.setItem("scratchchain_rpc", RPC);
     localStorage.setItem("scratchchain_indexer", INDEXER);
+    localStorage.setItem("scratchchain_rpc_token", RPC_TOKEN);
     indexerOnline = null;
     rpcOnline = null;
     updateEndpointStatus();

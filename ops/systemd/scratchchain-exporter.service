@@ -1,0 +1,15 @@
+[Unit]
+Description=ScratchChain Prometheus Exporter
+After=network.target
+
+[Service]
+Type=simple
+User=scratchchain
+WorkingDirectory=/opt/scratchchain
+EnvironmentFile=/etc/scratchchain.env
+ExecStart=/usr/bin/python3 /opt/scratchchain/ops/prometheus_exporter.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target

@@ -14,3 +14,21 @@ python3 -m scratchchain --data-dir ./scratchchain_data balance --wallet ./scratc
 Explorer UI lives in `explorer/`.
 
 Full documentation: `scratchchain/README.md`
+
+Mainnet and ops docs:
+- `docs/MAINNET_READINESS.md`
+- `docs/TESTNET_LAUNCH_PLAN.md`
+- `docs/SECURITY_HARDENING.md`
+- `docs/OPERATIONS_RUNBOOK.md`
+- `docs/INCIDENT_RESPONSE.md`
+- `docs/GOVERNANCE.md`
+- `docs/TOKENOMICS_TEMPLATE.md`
+- `docs/LEGAL_CHECKLIST.md`
+- `docs/BUG_BOUNTY.md`
+- `docs/THREAT_MODEL.md`
+
+Ops scripts and templates:
+- `ops/run_local.sh`
+- `ops/backup.sh`
+- `ops/faucet.py`
+- `ops/prometheus_exporter.py`
